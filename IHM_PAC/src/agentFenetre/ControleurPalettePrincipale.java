@@ -2,8 +2,8 @@ package agentFenetre;
 
 import agentChampSaisie.AbstractionChSaisie;
 import agentChampSaisie.ControleurChSaisie;
-import agentChampSaisie.Pr�sentationChSaisie;
-import agentPalette.Pr�sentationPalette;
+import agentChampSaisie.PrésentationChSaisie;
+import agentPalette.PrésentationPalette;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,7 +21,7 @@ import javafx.scene.layout.StackPane;
 
 public class ControleurPalettePrincipale {
     private AbstractionPalettePrincipale model;
-    private Pr�sentationPalettePrincipale vue;
+    private PrésentationPalettePrincipale vue;
 
     private ControleurChSaisie control_ChampSaisie;
     private agentPalette.ControleurPalette control_PaletteOutils;
@@ -32,38 +32,26 @@ public class ControleurPalettePrincipale {
     private ObservableList<TemperatureAndModification> data =
             FXCollections.observableArrayList(new TemperatureAndModification("0","0") );
 
-    
-    
-    
-
     /* Le constructeur */
-    public ControleurPalettePrincipale(AbstractionPalettePrincipale m, Pr�sentationPalettePrincipale v ){
+    public ControleurPalettePrincipale(AbstractionPalettePrincipale m, PrésentationPalettePrincipale v ){
         this.model=m;
         this.vue=v;
         this.series=new XYChart.Series();
-        this.series.setName("temp�rature apr�s modification");
+        this.series.setName("température après modification");
 
     }
     
-    public Pr�sentationChSaisie getPresentationCh()
+    public PrésentationChSaisie getPresentationCh()
     {
     	return control_ChampSaisie.getVue();
     }
     
-    public Pr�sentationPalette getPresentationPalette()
+    public PrésentationPalette getPresentationPalette()
     {
     	return control_PaletteOutils.getVue();
     }
     
-    
-    
-
     public void control(){
-
-        
-        
-        
-        
         /*____________________________________________________________*/
         control_ChampSaisie=new ControleurChSaisie(this);
         control_PaletteOutils=new agentPalette.ControleurPalette(this);
@@ -105,10 +93,10 @@ public class ControleurPalettePrincipale {
     
     public void augmenter()
     {
-    	control_PaletteOutils.control(1);//L'opération 1:Augmenter la température
+    	control_PaletteOutils.control(1);//L'opÃ©ration 1:Augmenter la tempÃ©rature
         model.setTemperature(control_PaletteOutils.getTemperature());//lors du changement on notifie l'agent pere qui est ici le model
         control_ChampSaisie.setTemperature(model.getTemperature());//et le model notifie les autre agents
-        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met à jour notre vue à partir de son model associé
+        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met Ã  jour notre vue Ã  partir de son model associÃ©
 
 
         System.out.println(series.getData());
@@ -128,10 +116,10 @@ public class ControleurPalettePrincipale {
     
     public void diminuer()
     {
-        control_PaletteOutils.control(2);//L'opération 2:Diminuer la température
+        control_PaletteOutils.control(2);//L'opÃ©ration 2:Diminuer la tempÃ©rature
         model.setTemperature(control_PaletteOutils.getTemperature());//lors du changement on notifie l'agent pere qui est ici le model
         control_ChampSaisie.setTemperature(model.getTemperature());//et le model notifie les autre agents
-        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met à jour notre vue à partir de son model associé
+        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met Ã  jour notre vue Ã  partir de son model associÃ©
 
         vue.lineChart=new LineChart(vue.xAxis,vue.yAxis);
         System.out.println(series.getData());
@@ -152,16 +140,16 @@ public class ControleurPalettePrincipale {
     
     public void remiseZero()
     {
-        control_PaletteOutils.control(3);//L'opération 3:Mettre à 0 la température
+        control_PaletteOutils.control(3);//remise à 0 de la température
         model.setTemperature(control_PaletteOutils.getTemperature());//lors du changement on notifie l'agent pere qui est ici le model
         control_ChampSaisie.setTemperature(model.getTemperature());//et le model notifie les autre agents
-        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met à jour notre vue à partir de son model associé
+        this.getPresentationCh().setChampSaisie(String.valueOf(model.getTemperature()));//On met Ã  jour notre vue Ã  partir de son model associÃ©
         System.out.println(series.getData());
         vue.lineChart = new LineChart(vue.xAxis,vue.yAxis);
         series.getData().add(new XYChart.Data(series.getData().size(), model.getTemperature()));
         vue.lineChart.getData().add(series);
         System.out.println(series.getData());
-        vue.lineChart.setTitle("TP PAC");
+        vue.lineChart.setTitle("IHM_PAC");
 
 
         vue.pane = new StackPane();
@@ -176,7 +164,7 @@ public class ControleurPalettePrincipale {
         vue.tableauDonnees=new TableView<>();
         TableColumn modif=new TableColumn("Modification");
         modif.setCellValueFactory(new PropertyValueFactory<>("modification"));
-        TableColumn temperature=new TableColumn("Température");
+        TableColumn temperature=new TableColumn("TempÃ©rature");
         temperature.setCellValueFactory(new PropertyValueFactory<>("temperature"));
         vue.tableauDonnees.setItems(data);System.out.println(data);
         vue.tableauDonnees.getColumns().addAll(modif,temperature);
@@ -192,15 +180,15 @@ public class ControleurPalettePrincipale {
     public void onChangeSaisie()
     {
         control_ChampSaisie.control();//On prend la valeur de la Temperature depuis la vue et on la met dans le model
-        model.setTemperature(control_ChampSaisie.getTemperature());//On notifie le père de l'agent (le model de la fenêtre principale)
-        control_PaletteOutils.setTemperature(model.getTemperature());//et le model àson tour notifie les autres agents
+        model.setTemperature(control_ChampSaisie.getTemperature());//On notifie le pÃ¨re de l'agent (le model de la fenÃªtre principale)
+        control_PaletteOutils.setTemperature(model.getTemperature());//et le model Ã son tour notifie les autres agents
 
         vue.lineChart=new LineChart(vue.xAxis,vue.yAxis);
         System.out.println(series.getData());
         series.getData().add(new XYChart.Data(series.getData().size(), model.getTemperature()));
         System.out.println(series.getData());
         vue.lineChart.getData().add(series);
-        vue.lineChart.setTitle("TP PAC");
+        vue.lineChart.setTitle("IHM_PAC");
         vue.pane = new StackPane();
         vue.pane.getChildren().add(vue.lineChart);
         vue.border.setCenter(vue.pane);
